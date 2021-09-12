@@ -287,12 +287,12 @@ shared_ptr<UserDevice> Context::create_user_device(
 		default_delete<UserDevice>{}};
 }
 
-shared_ptr<Packet> Context::create_header_packet(Glib::TimeVal start_time)
+shared_ptr<Packet> Context::create_header_packet(Glib::TimeSpan start_time)
 {
 	auto header = g_new(struct sr_datafeed_header, 1);
 	header->feed_version = 1;
-	header->starttime.tv_sec = start_time.tv_sec;
-	header->starttime.tv_usec = start_time.tv_usec;
+	header->starttime.tv_sec = start_time / 1000000;
+	header->starttime.tv_usec = start_time % 1000000;
 	auto packet = g_new(struct sr_datafeed_packet, 1);
 	packet->type = SR_DF_HEADER;
 	packet->payload = header;
@@ -1154,11 +1154,10 @@ int Header::feed_version() const
 	return _structure->feed_version;
 }
 
-Glib::TimeVal Header::start_time() const
+Glib::TimeSpan Header::start_time() const
 {
-	return Glib::TimeVal(
-		_structure->starttime.tv_sec,
-		_structure->starttime.tv_usec);
+	return (_structure->starttime.tv_sec * 1000000
+			+ _structure->starttime.tv_usec);
 }
 
 Meta::Meta(const struct sr_datafeed_meta *structure) :

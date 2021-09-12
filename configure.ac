@@ -373,7 +373,7 @@ AS_IF([test "x$HAVE_CXX11" != x1],
 	[SR_APPEND([sr_cxx_missing], [', '], ['C++11'])])
 
 # The C++ bindings need glibmm.
-SR_PKG_CHECK([glibmm], [SR_PKGLIBS_CXX], [glibmm-2.4 >= 2.32.0])
+SR_PKG_CHECK([glibmm], [SR_PKGLIBS_CXX], [glibmm-2.68 >= 2.32.0])
 AS_IF([test "x$sr_have_glibmm" != xyes],
 	[SR_APPEND([sr_cxx_missing], [', '], [glibmm])])
 
